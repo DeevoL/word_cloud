@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="Description" content="Enter your description here"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/cosmo/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css') }}">
+<title>Title</title>
+</head>
+<body>
+<h2>
+    Enter in a Wikipedia URL or a body of text to generate a Word Cloud from:
+</h2>
+
+<form action="" method="post" id="text" class= "center">
+    <textarea name = "text" form="text" rows="8" cols="50" id="cloud_text"></textarea>
+    <legend>Image Size(Default is medium if none are selected)</legend>
+    Small(400x400) <input type="radio" name="image_size" value="1">
+    <div>   </div>
+    Medium(800x800) <input type="radio" name="image_size" value="2">
+    <div>   </div>
+    Large(1200x1200) <input type="radio" name="image_size" value="3">
+    <br>
+    <br>
+    <legend>Colors</legend>
+    <input type="radio" name="color_scheme" value="1">
+    <img src="{{url_for('static',filename='scheme1.PNG') }}" class = "color_img">
+    <br>
+    <br>
+    <input type="radio" name="color_scheme" value="2">
+    <img src="{{url_for('static',filename='scheme2.PNG') }}" class = "color_img">
+    <br>
+    <br>
+    <input type="radio" name="color_scheme" value="3">
+    <img src="{{url_for('static',filename='scheme3.PNG') }}" class = "color_img">
+    <br>
+    <br>
+
+</form>
+
+<div class="center">
+    <button type="button" class="btn btn-primary" id="submit">Submit</button>
+</div>
+
+
+<div class="container-fluid"  id="display" class= "center">
+    <img src="" alt="" id="cloud" class="img-fluid center">
+    <br>
+    <a href="" id="download">Download Image</a>
+</div>
+
+
+
+<script>
+    let submit_btn = document.getElementById("submit");
+    // let url = "http://127.0.0.2:8080/cloud"
+    let url = "https://word-cloud-leungd.wn.r.appspot.com/cloud"
+    submit_btn.addEventListener("click", function(){
+        try{
+            img_size = document.querySelector('input[name="image_size"]:checked').value
+        }
+        catch(err){
+            img_size = "2"
+        }
+
+        try{
+            cs = document.querySelector('input[name="color_scheme"]:checked').value
+        }
+        catch(err){
+            cs = "0"
+        }
+
+        let text_area = document.getElementById("cloud_text");
+        data = {
+            text: text_area.value,
+            size: img_size,
+            color: cs
+        };
+        const response = fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(data){
+        let img_display = document.getElementById("display");
+        img_display.style.width = parseInt(img_size) * 400
+        img_display.style.height = parseInt(img_size) * 400
+        let image = document.getElementById("cloud");
+        image.src = data.image;
+        let a = document.getElementById("download");
+        a.href = data.image;
+        a.download = "wordcloud.png";
+        });
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+</body>
+</html>

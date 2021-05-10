@@ -1,0 +1,12 @@
+.center {
+	margin: auto;
+	width: 60%;
+}
+
+#display {
+	height: 800px;
+	width: 800px;
+}
+#cloud {
+	width: 100%;
+}
