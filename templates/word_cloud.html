@@ -74,11 +74,16 @@
         }
 
         let text_area = document.getElementById("cloud_text");
+        let cloud_text = text_area.value
+        if (cloud_text.length > 2000){
+            cloud_text = cloud_text.slice(0,2000)
+        }
+
         data = {
-            text: text_area.value,
+            text: cloud_text,
             size: img_size,
             color: cs
-        };
+        }
         const response = fetch(url, {
             method: 'POST',
             mode: 'cors',

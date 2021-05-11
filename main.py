@@ -22,14 +22,15 @@ def cloud_post():
             color = int(request.get_json()["color"])
         except:
             color = 0
-        
+
         if validators.url(cloud_text):
             url = {"url": cloud_text}
             response = requests.post("https://wikiscraperproject.herokuapp.com/", data = url)
-            if len(response.text) > 2000:
-                cloud_text = response.text[:2000]
-            else:
-                cloud_text = response.text
+            cloud_text = response.text
+
+        if len(cloud_text) > 1800:
+            cloud_text = cloud_text[:1800]
+
         # default
         if color == 0:
             colors = [
