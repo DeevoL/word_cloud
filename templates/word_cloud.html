@@ -11,12 +11,18 @@
 <title>Title</title>
 </head>
 <body>
-<h2>
-    Enter in a Wikipedia URL or a body of text to generate a Word Cloud from:
+    <h1>WordCloud Generator</h1>
+    <br>
+<h2 class="center">
+    Step 1: Enter in a Wikipedia URL
+    OR a body of text to generate a Word Cloud from:
 </h2>
 
 <form action="" method="post" id="text" class= "center">
     <textarea name = "text" form="text" rows="8" cols="50" id="cloud_text"></textarea>
+    <br>
+    <h2>Step 2(Optional): </h2>
+    <br>
     <legend>Image Size(Default is medium if none are selected)</legend>
     Small(400x400) <input type="radio" name="image_size" value="1">
     <div>   </div>
@@ -25,31 +31,47 @@
     Large(1200x1200) <input type="radio" name="image_size" value="3">
     <br>
     <br>
-    <legend>Colors</legend>
+    <legend>Text Colors</legend>
     <input type="radio" name="color_scheme" value="1">
     <img src="{{url_for('static',filename='scheme1.PNG') }}" class = "color_img">
+    <!-- <img src="static/images/scheme1.PNG" class = "color-img"> -->
     <br>
     <br>
     <input type="radio" name="color_scheme" value="2">
     <img src="{{url_for('static',filename='scheme2.PNG') }}" class = "color_img">
+    <!-- <img src="static/images/scheme2.PNG" class = "color-img"> -->
     <br>
     <br>
     <input type="radio" name="color_scheme" value="3">
     <img src="{{url_for('static',filename='scheme3.PNG') }}" class = "color_img">
+    <!-- <img src="static/images/scheme3.PNG" class = "color-img"> -->
     <br>
     <br>
+    <input type="radio" name="color_scheme" value="4">
+    Pick Custom Colors:
+    <div>
+        <input type="color" id = "custom-1">
+        <input type="color" id = "custom-2">
+        <input type="color" id = "custom-3">
+        <input type="color" id = "custom-4">
+        <input type="color" id = "custom-5">
+    </div>
 
 </form>
+<br>
 
 <div class="center">
-    <button type="button" class="btn btn-primary" id="submit">Submit</button>
+    <button type="button" class="btn btn-primary" id="submit">Generate WordCloud</button>
 </div>
 
 
 <div class="container-fluid"  id="display" class= "center">
-    <img src="" alt="" id="cloud" class="img-fluid center">
+    <img src="{{url_for('static',filename='sample.png') }}" id = "cloud" class = "img-fluid center">
+    <!-- <img src="static/images/sample.PNG" alt="" id="cloud" class="img-fluid center"> -->
     <br>
-    <a href="" id="download">Download Image</a>
+    <a href="" id="download-png">Download Image(.PNG)</a>
+    <br>
+    <a href="" id="download-jpeg">Download Image(.JPEG)</a>
 </div>
 
 
@@ -82,7 +104,17 @@
         data = {
             text: cloud_text,
             size: img_size,
-            color: cs
+            color: cs,
+            custom_colors: null
+        }
+        if (cs == "4"){
+            data.custom_colors = [
+                document.getElementById("custom-1").value,
+                document.getElementById("custom-2").value,
+                document.getElementById("custom-3").value,
+                document.getElementById("custom-4").value,
+                document.getElementById("custom-5").value
+            ]
         }
         const response = fetch(url, {
             method: 'POST',
@@ -101,9 +133,12 @@
         img_display.style.height = parseInt(img_size) * 400
         let image = document.getElementById("cloud");
         image.src = data.image;
-        let a = document.getElementById("download");
-        a.href = data.image;
-        a.download = "wordcloud.png";
+        let png = document.getElementById("download-png");
+        png.href = data.image;
+        png.download = "wordcloud.png";
+        let jpeg = document.getElementById("download-jpeg");
+        jpeg.href = data.image;
+        jpeg.download = "wordcloud.jpeg";
         });
     });
 </script>

@@ -68,6 +68,9 @@ def cloud_post():
                 '#f4acb7',
                 '#9d8189'
                 ]
+        # Custom, user selected colors
+        elif color == 4:
+            colors = request.get_json()["custom_colors"]
 
         url = "https://textvis-word-cloud-v1.p.rapidapi.com/v1/textToCloud"
         payload = {
