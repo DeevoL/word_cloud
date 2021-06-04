@@ -11,7 +11,7 @@
 <title>Title</title>
 </head>
 <body>
-    <h1>WordCloud Generator</h1>
+    <h1 class="center">WordCloud Generator</h1>
     <br>
 <h2 class="center">
     Step 1: Enter in a Wikipedia URL
@@ -33,18 +33,18 @@
     <br>
     <legend>Text Colors</legend>
     <input type="radio" name="color_scheme" value="1">
-    <img src="{{url_for('static',filename='scheme1.PNG') }}" class = "color_img">
-    <!-- <img src="static/images/scheme1.PNG" class = "color-img"> -->
+    <!-- <img src="{{url_for('static',filename='scheme1.PNG') }}" class = "color_img"> -->
+    <img src="static/images/scheme1.PNG" class = "color-img">
     <br>
     <br>
     <input type="radio" name="color_scheme" value="2">
-    <img src="{{url_for('static',filename='scheme2.PNG') }}" class = "color_img">
-    <!-- <img src="static/images/scheme2.PNG" class = "color-img"> -->
+    <!-- <img src="{{url_for('static',filename='scheme2.PNG') }}" class = "color_img"> -->
+    <img src="static/images/scheme2.PNG" class = "color-img">
     <br>
     <br>
     <input type="radio" name="color_scheme" value="3">
-    <img src="{{url_for('static',filename='scheme3.PNG') }}" class = "color_img">
-    <!-- <img src="static/images/scheme3.PNG" class = "color-img"> -->
+    <!-- <img src="{{url_for('static',filename='scheme3.PNG') }}" class = "color_img"> -->
+    <img src="static/images/scheme3.PNG" class = "color-img">
     <br>
     <br>
     <input type="radio" name="color_scheme" value="4">
@@ -66,8 +66,8 @@
 
 
 <div class="container-fluid"  id="display" class= "center">
-    <img src="{{url_for('static',filename='sample.png') }}" id = "cloud" class = "img-fluid center">
-    <!-- <img src="static/images/sample.PNG" alt="" id="cloud" class="img-fluid center"> -->
+    <!-- <img src="{{url_for('static',filename='sample.png') }}" id = "cloud" class = "img-fluid center"> -->
+    <img src="static/images/sample.PNG" alt="" id="cloud" class="img-fluid center">
     <br>
     <a href="" id="download-png">Download Image(.PNG)</a>
     <br>
@@ -78,8 +78,8 @@
 
 <script>
     let submit_btn = document.getElementById("submit");
-    // let url = "http://127.0.0.2:8080/cloud"
-    let url = "https://word-cloud-leungd.wn.r.appspot.com/cloud"
+    let url = "http://127.0.0.2:8080/cloud"
+    // let url = "https://word-cloud-leungd.wn.r.appspot.com/cloud"
     submit_btn.addEventListener("click", function(){
         try{
             img_size = document.querySelector('input[name="image_size"]:checked').value
@@ -89,10 +89,10 @@
         }
 
         try{
-            cs = document.querySelector('input[name="color_scheme"]:checked').value
+            color_scheme = document.querySelector('input[name="color_scheme"]:checked').value
         }
         catch(err){
-            cs = "0"
+            color_scheme = "0"
         }
 
         let text_area = document.getElementById("cloud_text");
@@ -104,10 +104,10 @@
         data = {
             text: cloud_text,
             size: img_size,
-            color: cs,
+            color: color_scheme,
             custom_colors: null
         }
-        if (cs == "4"){
+        if (color_scheme == "4"){
             data.custom_colors = [
                 document.getElementById("custom-1").value,
                 document.getElementById("custom-2").value,
@@ -128,6 +128,7 @@
             return response.json();
         })
         .then(function(data){
+        // Update image display on page
         let img_display = document.getElementById("display");
         img_display.style.width = parseInt(img_size) * 400
         img_display.style.height = parseInt(img_size) * 400

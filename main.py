@@ -2,6 +2,7 @@ import requests
 import json
 import validators
 from flask import Flask, request, Response, render_template
+from colors import color_choice
 
 
 app = Flask(__name__)
@@ -25,51 +26,15 @@ def cloud_post():
 
         if validators.url(cloud_text):
             url = {"url": cloud_text}
+            # using teammates scraping service
             response = requests.post("https://wikiscraperproject.herokuapp.com/", data = url)
             cloud_text = response.text
 
         if len(cloud_text) > 1800:
             cloud_text = cloud_text[:1800]
 
-        # default
-        if color == 0:
-            colors = [
-                '#375E97',
-                '#FB6542',
-                '#FFBB00',
-                '#3F681C'
-                ]
-
-        #blues
-        elif color == 1:
-            colors = [
-                '#6930C3',
-                '#5390D9',
-                '#48BFE3',
-                '#64DFDF',
-                '#80FFDB'
-                ]
-
-        # balanced
-        elif color == 2:
-            colors = [
-                '#264653',
-                '#2a9d8f',
-                '#e9c46a',
-                '#f4a261',
-                '#e76f51'
-                ]
-        # palewave
-        elif color == 3:
-            colors = [
-                '#d8e2dc',
-                '#ffe5d9',
-                '#ffcad4',
-                '#f4acb7',
-                '#9d8189'
-                ]
-        # Custom, user selected colors
-        elif color == 4:
+        colors = color_choice(color)
+        if colors == "custom":
             colors = request.get_json()["custom_colors"]
 
         url = "https://textvis-word-cloud-v1.p.rapidapi.com/v1/textToCloud"
